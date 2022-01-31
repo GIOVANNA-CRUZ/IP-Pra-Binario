@@ -7,57 +7,68 @@ public class Binario {
 
 		Scanner leitorTeclado = new Scanner(System.in);
 		System.out.println("Insira o número do IP:");
-		String IP = leitorTeclado.nextLine();
+		String ip = leitorTeclado.nextLine();
+		System.out.println("Insira o número da subrede");
+		String subrede = leitorTeclado.nextLine();
 		leitorTeclado.close();
-		app.transformarDecimalEmBinario(IP);
 
-	}
-
-	public void transformarDecimalEmBinario(String IP) {
-
-		String numerosIP[] = IP.split("\\.");/* Criando um array como String para receber o número do IP inserido no Scanner*/
-
-		int[] resultadoDivisao = new int[numerosIP.length];
-		int[] restoDivisao;
-		restoDivisao = new int[8];
-
-		for (int i = 0; i < numerosIP.length; i++) {
-			try {
-				resultadoDivisao[i] = Integer.parseInt(numerosIP[i]); /*
-															 * Transforma o array numeros(string) em um
-															 * arrayinteiro(int) passando para o intArray
-															 */
-
-			} catch (Exception e) {
-				System.out.println("Unable to parse string to int: " + e.getMessage());
-			}
-
-			/* Lógica para mudar de decimal para binário */
-			/* Divide por 2, e se tiver resto, vai ser 1, se não tiver resto, é 0 */
-
-			do {
- 
-				for (int x = restoDivisao.length - 1; x >= 0; x--) { /* Inverte o array */
-					restoDivisao[x] = resultadoDivisao[i] % 2;
-					resultadoDivisao[i] = resultadoDivisao[i] / 2;
-				}
-				for (int y = 0; y < restoDivisao.length; y++) {/* Imprime o array invertido */
-					System.out.print(restoDivisao[y]);
-				}
-				
-
-			}while (resultadoDivisao[i] > 2);
-			
-			if(i < numerosIP.length - 1) {
-			
-			  System.out.print('.');
-			}
-			
-
-		
-			
-
+		// verificar se o IP pertence a subrede
+		if (app.verificarIPnaSubrede(ip, subrede)) {
+			System.out.println("Este IP pertence a esta subrede");
+		} else {
+			System.out.println("Este IP não pertence a esta subrede");
 		}
 
 	}
+
+	private boolean verificarIPnaSubrede(String ip, String subrede) {
+
+		// separar ip subrede do tamanho dela
+		String[] estruturaSubrede = subrede.split("/");
+		int tamanhoSubrede = Integer.parseInt(estruturaSubrede[1]);
+
+		// tranformar ip decimal em ip binario
+		String ipBinario = this.transformarIpDecimalEmBinario(ip);
+
+		// transformar subrede decimal em binario
+		String subredeBinario = this.transformarIpDecimalEmBinario(estruturaSubrede[0]);
+
+		// comparar os n primeiros bits do ip com os n primeios bits da subrede
+		String radicalIP = ipBinario.substring(0, tamanhoSubrede);
+		String radicalSubRede = subredeBinario.substring(0, tamanhoSubrede);
+
+		return radicalIP.equalsIgnoreCase(radicalSubRede);
+	}
+
+	private String transformarIpDecimalEmBinario(String ipDecimal) {
+
+		String[] ip = ipDecimal.split("\\.");
+		int[] restoDivisaoIP = new int[8];
+		int divisor = 0;
+		int contador = 0;
+		String saida = "";
+
+		for (int i = 0; i < 4; i++) {
+			divisor = Integer.parseInt(ip[i]);
+			restoDivisaoIP = new int[8];
+			contador = 7;
+
+			while (divisor >= 2) {
+				restoDivisaoIP[contador] = divisor % 2;
+				divisor = divisor / 2;
+				contador--;
+			}
+
+			if (divisor == 1) {
+				restoDivisaoIP[contador] = 1;
+			}
+
+			for (int k = 0; k < 7; k++) {
+				saida += restoDivisaoIP[k];
+			}
+		}
+
+		return saida;
+	}
+
 }
