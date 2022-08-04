@@ -1,6 +1,6 @@
 <h1>IP-Pra-Binario 	:computer:</h1>
 
-<h2>Description and Funcionalities books:</h2>
+<h2>Description and Funcionalities :books:</h2>
 This project has the objective of analyzing if a given IP belongs to some subnet, according to the rules established for such.
 The person enters the IP and the system will convert the number into binary,if it matches the required size, it belongs, if not,
 it does not. It was made exclusively in Java, and is not a web project.
