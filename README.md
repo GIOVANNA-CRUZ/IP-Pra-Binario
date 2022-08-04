@@ -1,4 +1,4 @@
-<h1>IP-Pra-Binario</h1>
+<h1>IP-Pra-Binario</h1> 	:computer:
 
 <h2>Description and Funcionalities</h2>
 This project has the objective of analyzing if a given IP belongs to some subnet, according to the rules established for such.
